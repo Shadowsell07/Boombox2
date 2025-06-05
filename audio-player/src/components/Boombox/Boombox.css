@@ -1,0 +1,34 @@
+.boombox-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.boombox {
+  width: 100%;
+  height: auto;
+}
+
+.boombox-body {
+  fill: #303030;
+  stroke: #404040;
+  stroke-width: 2;
+}
+
+.speaker {
+  fill: #202020;
+  stroke: #505050;
+  stroke-width: 3;
+}
+
+.display {
+  fill: #000;
+  stroke: #404040;
+  stroke-width: 1;
+}
+
+.controls {
+  fill: #404040;
+  stroke: #505050;
+  stroke-width: 1;
+}
