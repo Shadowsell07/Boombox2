@@ -27,8 +27,26 @@
   stroke-width: 1;
 }
 
-.controls {
-  fill: #404040;
-  stroke: #505050;
-  stroke-width: 1;
+.display-text {
+  fill: #00ff00;
+  font-family: 'Digital-7', monospace;
+  font-size: 24px;
+}
+
+.control-button {
+  fill: #505050;
+  stroke: #606060;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: fill 0.2s;
+}
+
+.control-button:hover {
+  fill: #606060;
+}
+
+.controls-group text {
+  fill: #ffffff;
+  font-size: 20px;
+  pointer-events: none;
 }
