@@ -19,6 +19,23 @@
   fill: #202020;
   stroke: #505050;
   stroke-width: 3;
+  transition: transform 0.1s ease-in-out;
+}
+
+.speaker.active {
+  animation: pulse 0.1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .display {

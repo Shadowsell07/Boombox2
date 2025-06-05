@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { AudioService } from '../../services/AudioService';
 import './Boombox.css';
 
 interface BoomboxProps {
@@ -13,8 +14,35 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
+  
+  const audioService = useRef(new AudioService());
+  const animationFrame = useRef<number>();
 
-  const handlePlayPause = () => {
+  useEffect(() => {
+    // Load initial track
+    audioService.current.loadTrack(audioFiles[currentTrack].url);
+    audioService.current.setVolume(volume);
+
+    return () => {
+      if (animationFrame.current) {
+        cancelAnimationFrame(animationFrame.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    audioService.current.loadTrack(audioFiles[currentTrack].url);
+    if (isPlaying) {
+      audioService.current.play();
+    }
+  }, [currentTrack]);
+
+  const handlePlayPause = async () => {
+    if (isPlaying) {
+      audioService.current.pause();
+    } else {
+      await audioService.current.play();
+    }
     setIsPlaying(!isPlaying);
   };
 
@@ -24,6 +52,12 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
 
   const handleNextTrack = () => {
     setCurrentTrack(prev => (prev < audioFiles.length - 1 ? prev + 1 : 0));
+  };
+
+  // Add volume control
+  const handleVolumeChange = (newVolume: number) => {
+    setVolume(newVolume);
+    audioService.current.setVolume(newVolume);
   };
 
   return (
