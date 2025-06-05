@@ -11,7 +11,7 @@ export class AudioService {
   }
 
   private setupAudioContext() {
-    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    this.audioContext = new ((window as any).AudioContext || (window as any).webkitAudioContext)();
     if (this.audioContext) {
       this.analyser = this.audioContext.createAnalyser();
       const source = this.audioContext.createMediaElementSource(this.audio);

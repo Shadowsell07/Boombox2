@@ -1,13 +1,18 @@
-audio-player
-├── src
-│   ├── app.ts
-│   ├── components
-│   │   ├── AudioPlayer.ts
-│   │   └── Controls.ts
-│   ├── services
-│   │   └── AudioService.ts
-│   └── types
-│       └── index.ts
-├── package.json
-├── tsconfig.json
-└── README.md
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]
+}
