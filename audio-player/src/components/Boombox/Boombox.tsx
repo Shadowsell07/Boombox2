@@ -190,6 +190,32 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
               fill="#ffffbe"
             />
           </symbol>
+
+          {/* Add two different colored wave paths in defs */}
+          <path 
+            id="wavePathBlue" 
+            d="M0,25 Q30,5 60,25 Q90,45 120,25 Q150,5 180,25" 
+            fill="none" 
+            stroke="#4B9CD3"
+            strokeWidth="2"
+          />
+          
+          <path 
+            id="wavePathGold" 
+            d="M0,25 Q30,5 60,25 Q90,45 120,25 Q150,5 180,25" 
+            fill="none" 
+            stroke="#ffffbe"
+            strokeWidth="2"
+          />
+
+          {/* Add hieroglyph and sanskrit symbols - place in defs section */}
+          <symbol id="hieroglyphs" viewBox="0 0 100 20">
+            <text x="0" y="15" className="ancient-text" fontSize="16">☥ 𓂀 𓃭 𓆣 𓊵 𓋴 𓌳 𓀀</text>
+          </symbol>
+          
+          <symbol id="sanskrit" viewBox="0 0 100 20">
+            <text x="0" y="15" className="ancient-text" fontSize="16">ॐ श्री गुरु नमः</text>
+          </symbol>
         </defs>
         
         {/* Update boombox body position and size */}
@@ -262,19 +288,38 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
           <text x="-120" y="5" className="volume-label" fontSize="18">VOL</text>
         </g>
 
-        {/* Animated waves - adjust transform and container width */}
-        <g className="waves-container" transform="translate(170, 480)">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <use 
-              key={`wave${i}`} 
-              href="#wavePath" 
-              className="wave-animation"
-              style={{
-                animation: `waveMove 6s infinite ${i * 0.8}s linear`
-              }}
-            />
-          ))}
-        </g>
+        {/* Scrolling ancient text */}
+        {[0, 1, 2, 3, 4].map((i) => (
+          <text 
+            key={`hiero${i}`} 
+            className="scroll-animation bottom"
+            x={170 + (i * 200)}
+            y="520"
+            fill="#ffffbe"
+            fontSize="16"
+            style={{
+              animation: `scrollText 12s infinite linear ${i * 2.4}s`
+            }}
+          >
+            ☥ 𓂀 𓃭 𓆣 𓊵 𓋴 𓌳 𓀀
+          </text>
+        ))}
+
+        {/* {[0, 1, 2, 3, 4].map((i) => (
+          <text 
+            key={`sanskrit${i}`} 
+            className="scroll-animation top"
+            x={170 + (i * 200)}
+            y="450"
+            fill="#4B9CD3"
+            fontSize="16"
+            style={{
+              animation: `scrollText 12s infinite linear ${i * 2.4 + 1.2}s`
+            }}
+          >
+            ॐ श्री गुरु नमः
+          </text>
+        ))} */}
 
         {/* Animated music notes - spread across full width */}
         {[0, 1, 2, 3, 4, 5].map((i) => (
