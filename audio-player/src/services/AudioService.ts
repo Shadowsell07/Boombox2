@@ -21,7 +21,7 @@ export class AudioService {
   async play() {
     try {
       if (!this.audioContext) {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
         const source = this.audioContext.createMediaElementSource(this.audio);
         source.connect(this.audioContext.destination);
       }

@@ -4,11 +4,11 @@ import { Boombox } from './components/Boombox/Boombox';
 const App = () => {
   const audioFiles = [
     {
-      title: "Song 1",
+      title: "116",  // Update these titles
       url: "/audio/116.mp3"
     },
     {
-      title: "Song 2",
+      title: "Defeat", // Update these titles
       url: "/audio/defeat.mp3"
     }
   ];
