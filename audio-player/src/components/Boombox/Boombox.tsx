@@ -89,41 +89,70 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
 
   return (
     <div className="boombox-container">
-      <svg className="boombox" viewBox="0 0 800 400">
-        <rect className="boombox-body" x="50" y="50" width="700" height="300" rx="20" />
-        <circle className="speaker left" cx="200" cy="200" r="80" />
-        <circle className="speaker right" cx="600" cy="200" r="80" />
-        <rect className="display" x="300" y="100" width="200" height="50" rx="5" />
-        <text x="400" y="130" textAnchor="middle" className="display-text">
+      <svg className="boombox" viewBox="0 0 1200 600"> {/* Increased from 800 400 */}
+        <defs>
+          <pattern 
+            id="boomboxPattern" 
+            patternUnits="userSpaceOnUse" 
+            width="1100"
+            height="500"
+            patternTransform="translate(0, 100)" // Add this to shift pattern down
+          >
+            <image
+              href="/images/Dsell1.jpg"  // Make sure filename matches your image
+              width="1100"
+              height="700"  // Increase height to have more room to shift
+              y="-100"      // Shift image up within pattern to show lower portion
+              preserveAspectRatio="xMidYMid slice"
+            />
+          </pattern>
+        </defs>
+        
+        {/* Update the boombox body size */}
+        <rect 
+          className="boombox-body" 
+          x="50" 
+          y="50" 
+          width="1100"     /* Increased from 700 */
+          height="500"     /* Increased from 300 */
+          rx="30"          /* Increased from 20 */
+          fill="url(#boomboxPattern)"
+        />
+        
+        {/* Adjust other component positions proportionally */}
+        <circle className="speaker left" cx="300" cy="300" r="120" /> {/* Adjusted position and size */}
+        <circle className="speaker right" cx="900" cy="300" r="120" /> {/* Adjusted position and size */}
+        <rect className="display" x="450" y="150" width="300" height="75" rx="8" /> {/* Adjusted position and size */}
+        <text x="600" y="190" textAnchor="middle" className="display-text">
           {audioFiles[currentTrack]?.title || 'No track selected'}
         </text>
-        <g className="controls-group" transform="translate(300, 170)">
-          <circle className="control-button" cx="50" cy="50" r="20" onClick={handlePrevTrack} />
-          <text x="50" y="55" textAnchor="middle">⏮</text>
-          <circle className="control-button" cx="100" cy="50" r="20" onClick={handlePlayPause} />
-          <text x="100" y="55" textAnchor="middle">{isPlaying ? '⏸' : '▶'}</text>
-          <circle className="control-button" cx="150" cy="50" r="20" onClick={handleNextTrack} />
-          <text x="150" y="55" textAnchor="middle">⏭</text>
+        <g className="controls-group" transform="translate(600, 270)">
+          <circle className="control-button" cx="-100" cy="0" r="30" onClick={handlePrevTrack} />
+          <text x="-100" y="5" textAnchor="middle">⏮</text>
+          <circle className="control-button" cx="0" cy="0" r="30" onClick={handlePlayPause} />
+          <text x="0" y="5" textAnchor="middle">{isPlaying ? '⏸' : '▶'}</text>
+          <circle className="control-button" cx="100" cy="0" r="30" onClick={handleNextTrack} />
+          <text x="100" y="5" textAnchor="middle">⏭</text>
         </g>
         
         {/* Add volume slider after controls group */}
-        <g className="volume-control" transform="translate(300, 250)">
+        <g className="volume-control" transform="translate(600, 350)">
           {/* Minus button */}
           <circle 
             className="control-button" 
-            cx="-20" 
+            cx="-40" 
             cy="10" 
-            r="15" 
+            r="20" 
             onClick={handleVolumeDecrease} 
           />
-          <text x="-20" y="15" textAnchor="middle">−</text>
+          <text x="-40" y="15" textAnchor="middle">−</text>
 
           {/* Volume bar */}
           <rect
             className="volume-bg"
             x="0"
             y="0"
-            width="200"
+            width="400"
             height="20"
             rx="10"
           />
@@ -131,7 +160,7 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
             className="volume-level"
             x="0"
             y="0"
-            width={200 * volume}
+            width={400 * volume}
             height="20"
             rx="10"
           />
@@ -139,14 +168,14 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
           {/* Plus button */}
           <circle 
             className="control-button" 
-            cx="220" 
+            cx="60" 
             cy="10" 
-            r="15" 
+            r="20" 
             onClick={handleVolumeIncrease} 
           />
-          <text x="220" y="15" textAnchor="middle">+</text>
+          <text x="60" y="15" textAnchor="middle">+</text>
 
-          <text x="-50" y="15" className="volume-label">VOL</text>
+          <text x="-100" y="15" className="volume-label">VOL</text>
         </g>
       </svg>
     </div>

@@ -1,18 +1,19 @@
 .boombox-container {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px; /* Increased from 800px */
   margin: 0 auto;
+  padding: 20px;
 }
 
 .boombox {
   width: 100%;
   height: auto;
+  aspect-ratio: 2/1; /* Maintain aspect ratio */
 }
 
 .boombox-body {
-  fill: #303030;
-  stroke: #404040;
-  stroke-width: 2;
+  fill: url(#boomboxPattern);
+  filter: brightness(0.9); /* Slightly lighter than before */
 }
 
 .speaker {
@@ -93,4 +94,13 @@
   fill: #ffffff;
   font-size: 14px;
   user-select: none;
+}
+
+/* Add shadows to make components pop over the background */
+.speaker, .display, .control-button, .volume-control {
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+.display-text, .controls-group text, .volume-label {
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
