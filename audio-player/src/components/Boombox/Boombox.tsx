@@ -99,17 +99,20 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
       if (isPlaying) {
         const audioData = audioService.current.getAudioData();
         if (audioData) {
-          // Use first few frequency bands for animation
           const average = (audioData[0] + audioData[1] + audioData[2]) / 3;
-          const scale = 1 + (average / 255) * 0.1; // Max 10% increase
+          const scale = 1 + (average / 255) * 0.1;
           setSpeakerScale(scale);
+          
+          // Update animation speeds based on audio
+          const speed = 3 - (average / 255) * 2; // Between 1-3s
+          document.documentElement.style.setProperty('--wave-duration', `${speed}s`);
+          document.documentElement.style.setProperty('--note-duration', `${speed * 1.5}s`);
         }
       }
       animationFrame.current = requestAnimationFrame(updateAnimation);
     };
 
     updateAnimation();
-
     return () => {
       if (animationFrame.current) {
         cancelAnimationFrame(animationFrame.current);
@@ -162,6 +165,23 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
             <circle cx="120" cy="120" r="60" fill="#181818" />
             <circle cx="120" cy="120" r="30" fill="#303030" />
           </pattern>
+
+          {/* Add wave path */}
+          <path 
+            id="wavePath" 
+            d="M0,25 Q30,5 60,25 Q90,45 120,25 Q150,5 180,25" 
+            fill="none" 
+            stroke="#4B9CD3"  /* Changed from #505050 to Carolina Blue */
+            strokeWidth="2"
+          />
+          
+          {/* Add music note symbol */}
+          <symbol id="musicNote" viewBox="0 0 20 32">
+            <path 
+              d="M10,0 L10,20 C10,24 6,28 0,24 C-4,22 -4,16 0,14 C4,12 10,14 10,18"
+              fill="#4B9CD3"  /* Carolina Blue color */
+            />
+          </symbol>
         </defs>
         
         {/* Update boombox body position and size */}
@@ -233,6 +253,36 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
 
           <text x="-120" y="5" className="volume-label" fontSize="18">VOL</text>
         </g>
+
+        {/* Animated waves - adjust transform and container width */}
+        <g className="waves-container" transform="translate(170, 480)">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <use 
+              key={`wave${i}`} 
+              href="#wavePath" 
+              className="wave-animation"
+              style={{
+                animation: `waveMove 6s infinite ${i * 0.8}s linear`
+              }}
+            />
+          ))}
+        </g>
+
+        {/* Animated music notes - spread across full width */}
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <use 
+            key={`note${i}`}
+            href="#musicNote"
+            className="note-animation"
+            width="20"
+            height="32"
+            x={200 + (i * 150)}
+            y="460"
+            style={{
+              animation: `noteFloat 4s infinite ${i * 0.6}s ease-in-out`
+            }}
+          />
+        ))}
       </svg>
     </div>
   );

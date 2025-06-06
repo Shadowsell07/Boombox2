@@ -88,3 +88,74 @@
 .display-text, .controls-group text, .volume-label {
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
+
+/* Add these animations */
+@keyframes waveMove {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(700px); /* Reduced from 900px to stay within bounds */
+  }
+}
+
+/* Update the note animation styles */
+.note-animation {
+  opacity: 0;
+  will-change: transform, opacity;
+  filter: drop-shadow(1px 1px 2px rgba(75, 156, 211, 0.3));
+  position: relative;
+}
+
+.note-animation::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 30px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(75, 156, 211, 0.3),
+    transparent
+  );
+  transform: translateY(5px) scaleY(0);
+  transform-origin: top;
+  animation: inherit;
+}
+
+@keyframes noteFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.8);
+  }
+}
+
+@keyframes noteStreak {
+  0% {
+    transform: translateY(5px) scaleY(0);
+    opacity: 0;
+  }
+  30% {
+    transform: translateY(25px) scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(45px) scaleY(0);
+    opacity: 0;
+  }
+}
+
+.wave-animation {
+  opacity: 0.4;  /* Made slightly more transparent */
+  will-change: transform;
+  filter: drop-shadow(1px 1px 2px rgba(75, 156, 211, 0.3));  /* Added subtle glow */
+  stroke: rgba(75, 156, 211, 0.8);  /* Lighter Carolina Blue with some transparency */
+}
