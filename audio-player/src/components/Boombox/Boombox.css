@@ -67,3 +67,30 @@
   font-size: 20px;
   pointer-events: none;
 }
+
+.volume-control {
+  cursor: pointer;
+}
+
+.volume-bg {
+  fill: #202020;
+  stroke: #404040;
+  stroke-width: 1;
+}
+
+.volume-level {
+  fill: #505050;
+  stroke: #606060;
+  stroke-width: 1;
+  transition: width 0.1s ease-out;
+}
+
+.volume-level:hover {
+  fill: #606060;
+}
+
+.volume-label {
+  fill: #ffffff;
+  font-size: 14px;
+  user-select: none;
+}

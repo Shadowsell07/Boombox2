@@ -2,31 +2,34 @@
 
 export class AudioService {
   private audio: HTMLAudioElement;
-  private analyser: AnalyserNode | null = null;
   private audioContext: AudioContext | null = null;
 
   constructor() {
     this.audio = new Audio();
-    this.setupAudioContext();
-  }
-
-  private setupAudioContext() {
-    this.audioContext = new ((window as any).AudioContext || (window as any).webkitAudioContext)();
-    if (this.audioContext) {
-      this.analyser = this.audioContext.createAnalyser();
-      const source = this.audioContext.createMediaElementSource(this.audio);
-      source.connect(this.analyser);
-      this.analyser.connect(this.audioContext.destination);
-    }
+    // Add debug listeners
+    this.audio.addEventListener('loadstart', () => console.log('Loading audio...'));
+    this.audio.addEventListener('canplay', () => console.log('Audio can play'));
+    this.audio.addEventListener('error', (e) => console.error('Audio error:', e));
   }
 
   async loadTrack(url: string) {
+    console.log('Loading track:', url);
     this.audio.src = url;
     await this.audio.load();
   }
 
-  play() {
-    return this.audio.play();
+  async play() {
+    try {
+      if (!this.audioContext) {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = this.audioContext.createMediaElementSource(this.audio);
+        source.connect(this.audioContext.destination);
+      }
+      await this.audio.play();
+    } catch (error) {
+      console.error('Play failed:', error);
+      throw error;
+    }
   }
 
   pause() {
@@ -34,13 +37,7 @@ export class AudioService {
   }
 
   setVolume(level: number) {
-    this.audio.volume = Math.max(0, Math.min(1, level));
-  }
-
-  getAnalyserData() {
-    if (!this.analyser) return new Uint8Array(0);
-    const data = new Uint8Array(this.analyser.frequencyBinCount);
-    this.analyser.getByteFrequencyData(data);
-    return data;
+    console.log('Setting volume to:', level);
+    this.audio.volume = level;
   }
 }

@@ -5,11 +5,11 @@ const App = () => {
   const audioFiles = [
     {
       title: "Song 1",
-      url: "/audio/116.mp3"  // Update with your actual filename
+      url: "/audio/116.mp3"
     },
     {
       title: "Song 2",
-      url: "/audio/defeat.mp3"  // Update with your actual filename
+      url: "/audio/defeat.mp3"
     }
   ];
 
