@@ -13,6 +13,7 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
   const [currentTrack, setCurrentTrack] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [speakerScale, setSpeakerScale] = useState(1);
   const audioService = useRef(new AudioService());
   const animationFrame = useRef<number | undefined>(undefined);
 
@@ -20,12 +21,13 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
   useEffect(() => {
     audioService.current.loadTrack(audioFiles[currentTrack].url);
     audioService.current.setVolume(volume);
+    audioService.current.setupAnalyser();  // Set up once when component mounts
     return () => {
       if (animationFrame.current) {
         cancelAnimationFrame(animationFrame.current);
       }
     };
-  }, []); // Keep this for initial setup
+  }, []); // Empty deps array means this runs once on mount
 
   // Add new useEffect to handle track changes
   useEffect(() => {
@@ -45,12 +47,17 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
   }, [currentTrack, isPlaying, volume]);
 
   const handlePlayPause = async () => {
-    if (isPlaying) {
-      audioService.current.pause();
-    } else {
-      await audioService.current.play();
+    try {
+      if (isPlaying) {
+        audioService.current.pause();
+      } else {
+        await audioService.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    } catch (error) {
+      console.error('Playback failed:', error);
+      setIsPlaying(false);
     }
-    setIsPlaying(!isPlaying);
   };
 
   const handleNextTrack = async () => {
@@ -87,6 +94,29 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
     audioService.current.setVolume(newVolume);
   };
 
+  useEffect(() => {
+    const updateAnimation = () => {
+      if (isPlaying) {
+        const audioData = audioService.current.getAudioData();
+        if (audioData) {
+          // Use first few frequency bands for animation
+          const average = (audioData[0] + audioData[1] + audioData[2]) / 3;
+          const scale = 1 + (average / 255) * 0.1; // Max 10% increase
+          setSpeakerScale(scale);
+        }
+      }
+      animationFrame.current = requestAnimationFrame(updateAnimation);
+    };
+
+    updateAnimation();
+
+    return () => {
+      if (animationFrame.current) {
+        cancelAnimationFrame(animationFrame.current);
+      }
+    };
+  }, [isPlaying]);
+
   return (
     <div className="boombox-container">
       <svg className="boombox" viewBox="0 0 1200 600">
@@ -104,6 +134,34 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
               preserveAspectRatio="xMidYMid slice"
             />
           </pattern>
+          
+          {/* Left speaker pattern */}
+          <pattern 
+            id="speakerPatternLeft" 
+            patternUnits="userSpaceOnUse" 
+            width="240"
+            height="240"
+            patternTransform="translate(-60, -60)"  // Keep current transform for left speaker
+          >
+            <circle cx="120" cy="120" r="115" fill="#181818" />
+            <circle cx="120" cy="120" r="90" fill="#202020" />
+            <circle cx="120" cy="120" r="60" fill="#181818" />
+            <circle cx="120" cy="120" r="30" fill="#303030" />
+          </pattern>
+
+          {/* Right speaker pattern */}
+          <pattern 
+            id="speakerPatternRight" 
+            patternUnits="userSpaceOnUse" 
+            width="240"
+            height="240"
+            patternTransform="translate(-180, -60)"  // Adjusted for right speaker
+          >
+            <circle cx="120" cy="120" r="115" fill="#181818" />
+            <circle cx="120" cy="120" r="90" fill="#202020" />
+            <circle cx="120" cy="120" r="60" fill="#181818" />
+            <circle cx="120" cy="120" r="30" fill="#303030" />
+          </pattern>
         </defs>
         
         {/* Update boombox body position and size */}
@@ -117,19 +175,24 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
           fill="url(#boomboxPattern)"
         />
         
-        {/* Adjust all component positions */}
+        {/* Update speakers with pattern */}
         <circle 
           className="speaker left" 
           cx="300" 
           cy="300" 
-          r="120" 
+          r="120"
+          fill="url(#speakerPatternLeft)"
+          style={{ transform: `scale(${speakerScale})`, transformOrigin: 'center' }}
         />
         <circle 
           className="speaker right" 
-          cx="900"    // Decreased from 900 to fit inside body
+          cx="900" 
           cy="300" 
-          r="120" 
+          r="120"
+          fill="url(#speakerPatternRight)"
+          style={{ transform: `scale(${speakerScale})`, transformOrigin: 'center' }}
         />
+
         {/* Center the display */}
         <rect 
           className="display" 

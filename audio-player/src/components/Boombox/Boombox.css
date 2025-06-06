@@ -17,10 +17,11 @@
 }
 
 .speaker {
-  fill: #202020;
   stroke: #505050;
   stroke-width: 3;
-  transition: transform 0.1s ease-in-out;
+  transition: transform 0.05s ease-out;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+  transform-origin: center;
 }
 
 .speaker.active {
