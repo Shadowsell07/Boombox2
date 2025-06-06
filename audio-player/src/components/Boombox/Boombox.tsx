@@ -182,6 +182,14 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
               fill="#4B9CD3"  /* Carolina Blue color */
             />
           </symbol>
+
+          {/* Add star symbol */}
+          <symbol id="star" viewBox="0 0 20 20">
+            <path
+              d="M10,0 L12,7 L19,7 L14,12 L16,19 L10,15 L4,19 L6,12 L1,7 L8,7 Z"
+              fill="#ffffbe"
+            />
+          </symbol>
         </defs>
         
         {/* Update boombox body position and size */}
@@ -280,6 +288,22 @@ export const Boombox: React.FC<BoomboxProps> = ({ audioFiles }) => {
             y="460"
             style={{
               animation: `noteFloat 4s infinite ${i * 0.6}s ease-in-out`
+            }}
+          />
+        ))}
+
+        {/* Animated stars at the top - mirroring note animation style */}
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <use
+            key={`star${i}`}
+            href="#star"
+            className="star-animation"
+            width="15"
+            height="15"
+            x={200 + (i * 150)}
+            y="80"
+            style={{
+              animation: `starFloat 4s infinite ${i * 0.6}s ease-in-out`
             }}
           />
         ))}
